@@ -46,6 +46,35 @@ export const getBlog = async (req, res) => {
     }
 }
 
+export const getAllBlogs = async (req, res) => {
+    try {
+        const blogs = await Blog.find({});
+        const blogsLength = blogs.length;
+        const blogsDetails = [];
+        for(var i = 0; i < blogsLength; i++){
+            const blogId = blogs[i]._id;
+            const blogDetail = await getBlogWithDetails(blogId);
+            
+            //blogsDetails.push(blogDetail);
+
+            if (Array.isArray(blogDetail)) {
+                blogsDetails.push(...blogDetail);
+            } else {
+                blogsDetails.push(blogDetail);
+            }
+        }
+
+        if (blogs) {
+            return res.status(200).json(blogsDetails);
+        } else {
+            return res.status(404).json({error: "Blogs not found."});
+        }
+    } catch (error) {
+        console.log("Error in getAllBlogs controller.", error);
+        res.status(500).json({error: "Interval server error."});
+    }
+}
+
 export const deleteBlog = async (req, res) => {
     try {
         const deletedBlogId = req.params.id;
@@ -60,4 +89,33 @@ export const deleteBlog = async (req, res) => {
         console.log("Error in deleteBlog controller: ", error);
         res.status(500).json({error: "Interval server error."});
     }
+}
+
+const getBlogWithDetails = async (blogId) => {
+    const blog = await Blog.aggregate([
+        {$match: {_id: blogId}},
+        {$lookup: {
+            from: "users",
+            localField: "auther",
+            foreignField: "_id",
+            as: "autherDetails",
+            pipeline: [{
+                $project: {createdAt: 0, gender: 0, password: 0, updatedAt: 0, __v: 0, _id: 0,}
+            }]
+        }},
+        {$lookup: {
+            from: "categories",
+            localField: "category",
+            foreignField: "_id",
+            as: "categoryDetails",
+            pipeline: [{
+                $project: {categoryId: 0, __v: 0, _id: 0,}
+            }]
+        }},
+        {$unwind: "$autherDetails"},
+        {$unwind: "$categoryDetails"},
+        {$project: {'auther': 0, 'category': 0,}}
+    ]);
+
+    return blog;
 }
