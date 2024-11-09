@@ -1,10 +1,12 @@
 import React from 'react';
 import useGetAllBlogs from '../../hooks/useGetAllBlogs';
 import { extarctTime } from '../../utils/extractTime';
+import { Link } from 'react-router-dom';
 
 const Home = () => {
   const { loading, blogs } = useGetAllBlogs();
   const formatedDate = extarctTime()
+  console.log("blogs: ", blogs);
 
   return (
     <div className="bg-[rgb(157,176,214)] min-h-screen">
@@ -25,15 +27,14 @@ const Home = () => {
                   Discover the latest insights and stories from our blog. Stay updated with fresh articles every day.
                 </p>
               </div>
-              
+
             </section>
             {/* Articles List */}
             <section>
               <h3 className="text-2xl font-semibold text-gray-800 mb-4">Latest Articles</h3>
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                 {blogs.map((blog, index) => {
-                  const date = new Date(blog.createdAt);
-                  const formattedDate = `${date.getDate().toString().padStart(2, '0')}/${(date.getMonth() + 1).toString().padStart(2, '0')}/${date.getFullYear()}`;
+                  const formattedDate = extarctTime(blog.createdAt)
                   return (
                     <article key={blog.id || index} className="bg-white p-4 rounded-lg shadow hover:shadow-lg transition duration-200">
                       <img
@@ -41,7 +42,11 @@ const Home = () => {
                         alt={blog.title}
                         className="w-full h-40 object-cover rounded-lg mb-4"
                       />
-                      <h4 className="text-xl font-semibold text-gray-800">{blog.title}</h4>
+                      <Link to={`/blogs/${blog._id}`}>
+                        <h4 className="text-xl font-semibold text-blue-600 hover:underline">
+                          {blog.title}
+                        </h4>
+                      </Link>
                       <p className="text-gray-600 mt-2">{blog.content}</p>
                       <div className="mt-4 flex items-center space-x-2">
                         <img

@@ -11,11 +11,13 @@ import WriteBlog from './pages/blog/WriteBlog';
 import { Navigate, Route, Router, Routes } from 'react-router-dom'
 import { Toaster } from 'react-hot-toast'
 import Navbar from './components/Navbar'
+import BlogDetails from './pages/blog/BlogDetails'
+import useGetAllBlogs from './hooks/useGetAllBlogs'
 
 function App() {
 
   const { authUser } = useAuthContext();
-
+  //const {blogs} = useGetAllBlogs();
   return (
     <div className='h-screen items-center'>
       <Navbar isAuthenticated={authUser} className="w-full fixed top-0 left-0" />
@@ -25,6 +27,7 @@ function App() {
         <Route path='/login' element={authUser ? <Navigate to={'/'} /> : <Login />} />
         <Route path='/signup' element={authUser ? <Navigate to={'/'} /> : <Signup />} />
         <Route path='/write-blog' element={<WriteBlog/>} />
+        <Route path="/blogs/:id" element={<BlogDetails />} />
       </Routes>
       <Toaster />
     </div>
