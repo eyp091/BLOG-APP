@@ -1,7 +1,7 @@
 import Blog from "../models/blogs.model.js";
 import Category from "../models/categories.model.js";
 import mongoose from "mongoose";
-const {ObjectId} = mongoose.Types;
+const { ObjectId } = mongoose.Types;
 
 export const setBlog = async (req, res) => {
     try {
@@ -34,9 +34,10 @@ export const setBlog = async (req, res) => {
 export const getBlog = async (req, res) => {
     try {
         const blogId = req.params.id;
-        const objectId = new ObjectId(blogId);
         
-        const selectedBlog = await getBlogWithDetails(objectId);        
+        const objectId = new ObjectId(blogId);
+
+        const selectedBlog = await getBlogWithDetails(objectId);
 
         if (selectedBlog) {
             return res.status(200).json(selectedBlog[0]);
@@ -95,8 +96,28 @@ export const deleteBlog = async (req, res) => {
     }
 }
 
+export const getMyBlogs = async (req, res) => {
+    try {
+        const userId = req.headers.authorization?.split(' ')[1];
+        if (!userId) {
+            return res.status(400).json({error: 'Kullanıcı id bulunamadı.'});
+        }
+
+        const myBlogs = await Blog.find({auther: userId});        
+
+        if (!myBlogs) {
+            return res.status(200).json({message: 'Henüz hiç blogunuz yok.'});
+        }
+
+        return res.status(200).json(myBlogs);
+    } catch (error) {
+        console.log("Error in getMyBlogs contoller.", error);
+        res.status(500).json({ error: "Interval server error" });
+    }
+}
+
 const getBlogWithDetails = async (blogId) => {
-    
+
     const blog = await Blog.aggregate([
         { $match: { _id: blogId } },
         {
@@ -125,6 +146,6 @@ const getBlogWithDetails = async (blogId) => {
         { $unwind: "$categoryDetails" },
         { $project: { 'auther': 0, 'category': 0, } }
     ]);
-    
+
     return blog;
 }

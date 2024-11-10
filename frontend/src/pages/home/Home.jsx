@@ -6,7 +6,6 @@ import { Link } from 'react-router-dom';
 const Home = () => {
   const { loading, blogs } = useGetAllBlogs();
   const formatedDate = extarctTime()
-  console.log("blogs: ", blogs);
 
   return (
     <div className="bg-[rgb(157,176,214)] min-h-screen">

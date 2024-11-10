@@ -29,7 +29,7 @@ const Navbar = ({ isAuthenticated }) => {
                         </Link>
                     </li>
                     <li>
-                        <Link to="/blog" className="hover:text-gray-400">
+                        <Link to="/edit-blog" className="hover:text-gray-400">
                             Blog
                         </Link>
                     </li>
@@ -66,7 +66,9 @@ const Navbar = ({ isAuthenticated }) => {
                                         className="cursor-pointer text-slate-800 flex w-full text-sm items-center rounded-md p-3 transition-all hover:bg-slate-100 focus:bg-slate-100 active:bg-slate-100"
                                     >
                                         <FaEdit className="w-5 h-5 text-slate-400" />
-                                        <p className="text-slate-800 font-medium ml-2">Edit Profile</p>
+                                        <Link to={'/edit-blog'} className='text-slate-800 font-medium ml-2' onClick={toggleDropdown}>
+                                            My Blogs
+                                        </Link>
                                     </li>
 
                                     <li
@@ -74,7 +76,7 @@ const Navbar = ({ isAuthenticated }) => {
                                         className="cursor-pointer text-slate-800 flex w-full text-sm items-center rounded-md p-3 transition-all hover:bg-slate-100 focus:bg-slate-100 active:bg-slate-100"
                                     >
                                         <FaEdit className="w-5 h-5 text-slate-400" />
-                                        <Link to='/write-blog' className='text-slate-800 font-medium ml-2'>
+                                        <Link to='/write-blog' className='text-slate-800 font-medium ml-2' onClick={toggleDropdown}>
                                             Write Blog
                                         </Link>
                                     </li>
