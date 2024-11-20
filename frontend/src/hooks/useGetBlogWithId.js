@@ -16,8 +16,6 @@ const useGetBlogWithId = (selectedBlogId) => {
                     throw new Error(data.error);
                 }
 
-                console.log("data: ", data);
-
                 setBlog(data);
             } catch (error) {
                 toast.error(error.message);

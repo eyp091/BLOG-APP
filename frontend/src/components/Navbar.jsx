@@ -58,7 +58,9 @@ const Navbar = ({ isAuthenticated }) => {
                                         className="cursor-pointer text-slate-800 flex w-full text-sm items-center rounded-md p-3 transition-all hover:bg-slate-100 focus:bg-slate-100 active:bg-slate-100"
                                     >
                                         <FaUserCircle className="w-5 h-5 text-slate-400" />
-                                        <p className="text-slate-800 font-medium ml-2">My Profile</p>
+                                        <Link to={'/my-profile'} className='text-slate-800 font-medium ml-2' onClick={toggleDropdown}>
+                                            My Profile
+                                        </Link>
                                     </li>
 
                                     <li

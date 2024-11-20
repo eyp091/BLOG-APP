@@ -14,6 +14,7 @@ import About from './pages/about/About'
 import { Navigate, Route, Router, Routes } from 'react-router-dom'
 import { Toaster } from 'react-hot-toast'
 import Navbar from './components/Navbar'
+import MyProfile from './pages/profile/MyProfile'
 
 function App() {
 
@@ -30,6 +31,7 @@ function App() {
         <Route path="/blogs/:id" element={authUser ? <BlogDetails /> : <Login />} />
         <Route path='/edit-blog' element={authUser ? <MyBlogs /> : <Login />} />
         <Route path='/about' element={<About />} />
+        <Route path='/my-profile' element={authUser ? <MyProfile /> : <Login />} /> 
       </Routes>
       <Toaster />
     </div>
