@@ -108,6 +108,5 @@ Bu proje MIT lisansı altında lisanslanmıştır. Daha fazla bilgi için `LICEN
 
 ## 📞 İletişim
 
-Proje Sahibi - [@yourusername](https://twitter.com/yourusername)
 
 Proje Linki: [https://github.com/yourusername/my-blog-app](https://github.com/yourusername/my-blog-app)
