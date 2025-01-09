@@ -1,11 +1,30 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import useGetMyBlogs from "../../hooks/useGetMyBlogs";
+import useDeleteSelectedBlog from "../../hooks/useDeleteSelectedBlog";
 
 const MyBlogs = () => {
     const navigate = useNavigate();
 
-    const { loading, blogs } = useGetMyBlogs();
+    const { loading, blogs: fetchedBlogs } = useGetMyBlogs();
+    const { deleteLoading, deletedBlog, deleteBlog} = useDeleteSelectedBlog();
+
+    const [blogs, setBlogs] = useState([]);
+
+    useEffect(() => {
+        if (fetchedBlogs) {
+            setBlogs(fetchedBlogs);
+        }
+    }, [fetchedBlogs]);
+
+    const handleDeleteBlog = async (blogId) => {
+        try {
+            await deleteBlog(blogId);
+            setBlogs((prevBlogs) => prevBlogs.filter((blog) => blog._id !== blogId)); // State'i güncelle
+        } catch (error) {
+            console.log("Silme işlemi sırasında hata oluştu.", error);
+        }
+    }
 
     return (
         <div className="max-w-6xl mx-auto p-4">
@@ -34,12 +53,17 @@ const MyBlogs = () => {
                                 >
                                     Düzenle
                                 </button>
-                                <button
-                                    onClick={() => handleDelete(blog._id)}
-                                    className="bg-red-500 text-white py-1 px-3 rounded-lg hover:bg-red-600 transition"
-                                >
-                                    Sil
-                                </button>
+                                
+                                <div className="flex justify-center">
+                                    <button
+                                        onClick={() => handleDeleteBlog(blog._id)} // Burada handleUpdateProfile'ı tetikleyin.
+                                        className={`bg-red-500 text-white py-1 px-3 rounded-lg hover:bg-red-600 transition ${deleteLoading ? "opacity-50 cursor-not-allowed" : ""
+                                            }`}
+                                        disabled={deleteLoading} // Yükleme sırasında butonu devre dışı bırakıyoruz.
+                                    >
+                                        {deleteLoading ? "Deleting..." : "Sil"}
+                                    </button>
+                                </div>
                             </div>
                         </div>
                     ))}
